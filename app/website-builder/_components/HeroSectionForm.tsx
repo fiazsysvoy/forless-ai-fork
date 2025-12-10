@@ -48,7 +48,7 @@ export function HeroSectionForm({
           onChange={(e) =>
             setData((d) => ({ ...d, brandName: e.target.value }))
           }
-          className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs"
+          className="input-base "
         />
       </label>
 
@@ -58,7 +58,7 @@ export function HeroSectionForm({
         <input
           value={data.tagline}
           onChange={(e) => setData((d) => ({ ...d, tagline: e.target.value }))}
-          className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs"
+          className="input-base"
         />
       </label>
 
@@ -73,7 +73,7 @@ export function HeroSectionForm({
               hero: { ...d.hero, headline: e.target.value },
             }))
           }
-          className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs"
+          className="input-base"
         />
       </label>
 
@@ -88,7 +88,7 @@ export function HeroSectionForm({
               hero: { ...d.hero, subheadline: e.target.value },
             }))
           }
-          className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs"
+          className="input-base"
         />
       </label>
 
@@ -103,7 +103,7 @@ export function HeroSectionForm({
               hero: { ...d.hero, imageQuery: e.target.value },
             }))
           }
-          className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs"
+          className="input-base"
         />
       </label>
 
@@ -118,7 +118,7 @@ export function HeroSectionForm({
               hero: { ...d.hero, primaryCta: e.target.value },
             }))
           }
-          className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs"
+          className="input-base"
         />
       </label>
 
@@ -133,7 +133,7 @@ export function HeroSectionForm({
               hero: { ...d.hero, primaryCtaLink: e.target.value },
             }))
           }
-          className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs"
+          className="input-base"
         />
       </label>
 
@@ -148,7 +148,7 @@ export function HeroSectionForm({
               hero: { ...d.hero, secondaryCta: e.target.value },
             }))
           }
-          className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs"
+          className="input-base"
         />
       </label>
 
@@ -163,7 +163,7 @@ export function HeroSectionForm({
               hero: { ...d.hero, secondaryCtaLink: e.target.value },
             }))
           }
-          className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs"
+          className="input-base"
         />
       </label>
     </div>

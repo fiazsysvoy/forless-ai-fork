@@ -63,7 +63,7 @@ export function FeaturesSectionForm({
               features: { ...prev.features, title: e.target.value },
             }))
           }
-          className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs"
+          className="input-base"
         />
       </label>
 
@@ -94,7 +94,7 @@ export function FeaturesSectionForm({
               <input
                 value={item.label}
                 onChange={(e) => updateItem(index, "label", e.target.value)}
-                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs"
+                className="input-base"
               />
             </label>
 
@@ -106,7 +106,7 @@ export function FeaturesSectionForm({
                   updateItem(index, "description", e.target.value)
                 }
                 rows={2}
-                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs"
+                className="input-base"
               />
             </label>
           </div>

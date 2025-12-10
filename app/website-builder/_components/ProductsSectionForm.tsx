@@ -64,7 +64,7 @@ export function ProductsSectionForm({ data, setData }: OffersSectionFormProps) {
               offers: { ...prev.offers, title: e.target.value },
             }))
           }
-          className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs"
+          className="input-base"
         />
       </label>
 
@@ -96,7 +96,7 @@ export function ProductsSectionForm({ data, setData }: OffersSectionFormProps) {
               <input
                 value={offer.name}
                 onChange={(e) => updateOffer(index, "name", e.target.value)}
-                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs"
+                className="input-base"
               />
             </label>
 
@@ -108,7 +108,7 @@ export function ProductsSectionForm({ data, setData }: OffersSectionFormProps) {
                   updateOffer(index, "description", e.target.value)
                 }
                 rows={2}
-                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs"
+                className="input-base"
               />
             </label>
 
@@ -120,7 +120,7 @@ export function ProductsSectionForm({ data, setData }: OffersSectionFormProps) {
                   updateOffer(index, "priceLabel", e.target.value)
                 }
                 placeholder="e.g. From $19/mo"
-                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs"
+                className="input-base"
               />
             </label>
           </div>

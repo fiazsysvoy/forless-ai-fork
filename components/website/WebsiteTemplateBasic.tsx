@@ -151,27 +151,108 @@ export function WebsiteTemplateBasic({ data }: Props) {
         className="border-t border-slate-800 bg-linear-to-b from-slate-900 to-slate-950"
       >
         <div className="mx-auto max-w-5xl px-4 py-12">
-          <h2 className="text-xl font-semibold">{data.contact.title}</h2>
-          <p className="mt-3 text-sm text-slate-300">
-            {data.contact.description}
-          </p>
-
-          <div className="mt-4 space-y-1 text-sm">
-            <div>Email: {data.contact.email}</div>
-            {data.contact.whatsapp && (
-              <div>WhatsApp: {data.contact.whatsapp}</div>
-            )}
-            {data.contact.phone && <div>Phone: {data.contact.phone}</div>}
+          {/* Heading + intro */}
+          <div className="max-w-xl">
+            <h2 className="text-xl font-semibold">{data.contact.title}</h2>
+            <p className="mt-3 text-sm text-slate-300">
+              {data.contact.description}
+            </p>
           </div>
 
-          <div className="mt-8 rounded-2xl border border-slate-800 bg-slate-950/70 p-6">
-            <h3 className="text-lg font-semibold">{data.finalCta.headline}</h3>
-            <p className="mt-2 text-sm text-slate-300">
-              {data.finalCta.subheadline}
-            </p>
-            <button className="mt-4 rounded-full bg-primary px-5 py-2 text-sm font-medium text-slate-950">
-              {data.finalCta.buttonLabel}
-            </button>
+          <div className="mt-8 grid gap-8 md:grid-cols-2">
+            {/* Contact details */}
+            <div className="space-y-4 text-sm">
+              <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+                <h3 className="text-sm font-semibold text-slate-100">
+                  Contact details
+                </h3>
+                <p className="mt-2 text-xs text-slate-400">
+                  Prefer email, WhatsApp, or a quick call? Reach us using any of
+                  the options below.
+                </p>
+
+                <div className="mt-4 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-slate-400">Email</span>
+                    <span className="text-xs font-medium text-slate-100">
+                      {data.contact.email}
+                    </span>
+                  </div>
+
+                  {data.contact.whatsapp && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-slate-400">WhatsApp</span>
+                      <span className="text-xs font-medium text-slate-100">
+                        {data.contact.whatsapp}
+                      </span>
+                    </div>
+                  )}
+
+                  {data.contact.phone && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-slate-400">Phone</span>
+                      <span className="text-xs font-medium text-slate-100">
+                        {data.contact.phone}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Optional small reassurance / note */}
+              <p className="text-xs text-slate-400">
+                We usually reply within 24 hours on business days.
+              </p>
+            </div>
+
+            {/* Contact form card */}
+            <form
+              className="rounded-2xl border border-slate-800 bg-slate-950/80 p-6 shadow-lg shadow-slate-950/40"
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <h3 className="text-lg font-semibold text-slate-100">
+                {data.finalCta.headline}
+              </h3>
+              <p className="mt-2 text-sm text-slate-300">
+                {data.finalCta.subheadline}
+              </p>
+
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                <label className="text-xs text-slate-300">
+                  Your name
+                  <input
+                    type="text"
+                    className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1.5 text-xs text-slate-100 outline-none ring-0 focus:border-primary"
+                    placeholder="Enter your name"
+                  />
+                </label>
+
+                <label className="text-xs text-slate-300">
+                  Email
+                  <input
+                    type="email"
+                    className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1.5 text-xs text-slate-100 outline-none ring-0 focus:border-primary"
+                    placeholder="you@example.com"
+                  />
+                </label>
+              </div>
+
+              <label className="mt-3 block text-xs text-slate-300">
+                Message
+                <textarea
+                  rows={4}
+                  className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1.5 text-xs text-slate-100 outline-none ring-0 focus:border-primary"
+                  placeholder="Tell us a bit about what you need help with..."
+                />
+              </label>
+
+              <button
+                type="submit"
+                className="mt-4 rounded-full bg-primary px-5 py-2 text-sm font-medium text-slate-950"
+              >
+                {data.finalCta.buttonLabel}
+              </button>
+            </form>
           </div>
         </div>
       </section>

@@ -18,7 +18,17 @@
 
   --font-sans: Arial, Helvetica, sans-serif;
 }
-theme {
+@layer components {
+  .input-base {
+    @apply mt-1 w-full rounded-md border border-slate-700 bg-slate-900
+           px-2 py-1 text-xs 
+           focus:ring-1 focus:ring-primary-hover 
+           focus:outline-none 
+           transition-all;
+  }
+}
+
+/* theme {
   --color-primary: #10b981;
   --color-primary-hover: #34d399;
 
@@ -32,7 +42,7 @@ theme {
   --color-text-muted: #94a3b8;
 
   --font-sans: Arial, Helvetica, sans-serif;
-}
+} */
 
 /* ===============================
    DARK MODE OVERRIDES

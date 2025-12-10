@@ -21,9 +21,7 @@ export default function RootLayout({
             <Navbar />
 
             <main className="flex-1">
-              <div className="max-w-5xl mx-auto px-4 py-8 sm:py-10">
-                {children}
-              </div>
+              <div className=" mx-auto px-4 py-8 sm:py-10">{children}</div>
             </main>
 
             <footer className="border-t border-slate-800 bg-bg-card mt-8">

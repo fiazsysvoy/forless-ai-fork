@@ -12,6 +12,7 @@ import { HeroSectionForm } from "./_components/HeroSectionForm";
 import { AboutSectionForm } from "./_components/AboutSectionForm";
 import { FeaturesSectionForm } from "./_components/FeatureSectionForm";
 import { ProductsSectionForm } from "./_components/ProductsSectionForm";
+import { ContactSectionForm } from "./_components/ContactSectionForm";
 
 const builderSections = [
   { id: "hero", label: "Hero" },
@@ -35,7 +36,7 @@ export default function WebsiteBuilderPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50">
-      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-6 lg:flex-row">
+      <div className="mx-auto flex max-w-full flex-col gap-6 px-4 py-6 lg:flex-row">
         <aside className="w-full space-y-4 rounded-2xl border border-slate-800 bg-slate-900/60 p-4 lg:w-80 lg:min-w-80 lg:max-w-80">
           <h1 className="text-lg font-semibold mb-2">Website Builder</h1>
 
@@ -70,6 +71,9 @@ export default function WebsiteBuilderPage() {
             <ProductsSectionForm data={data} setData={setData} />
           )}
 
+          {section === "contact" && (
+            <ContactSectionForm data={data} setData={setData} />
+          )}
           {/* Previous / Next */}
           <div className="mt-4 flex justify-between">
             <button

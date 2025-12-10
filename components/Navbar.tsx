@@ -58,7 +58,7 @@ export function Navbar() {
           ) : user ? (
             <>
               <span className="hidden sm:inline text-slate-400 text-xs">
-                {user.email}
+                {user.email?.split("@")[0]}
               </span>
               <button
                 onClick={handleLogout}

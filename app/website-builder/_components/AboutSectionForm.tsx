@@ -20,7 +20,7 @@ export function AboutSectionForm({ data, setData }: AboutSectionFormProps) {
               about: { ...d.about, title: e.target.value },
             }))
           }
-          className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs"
+          className="input-base"
         />
       </label>
 
@@ -35,7 +35,7 @@ export function AboutSectionForm({ data, setData }: AboutSectionFormProps) {
             }))
           }
           rows={4}
-          className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs"
+          className="input-base"
         />
       </label>
 
@@ -49,7 +49,7 @@ export function AboutSectionForm({ data, setData }: AboutSectionFormProps) {
               about: { ...d.about, imageQuery: e.target.value },
             }))
           }
-          className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs"
+          className="input-base"
         />
       </label>
     </div>
