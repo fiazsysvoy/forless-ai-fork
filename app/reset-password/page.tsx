@@ -1,13 +1,14 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { supabase } from "@/lib/supabase/client";
+import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 
 export default function ResetPasswordRequestPage() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [supabase] = useState(() => createBrowserSupabaseClient());
 
   const handleResetRequest = async (e: FormEvent) => {
     e.preventDefault();
@@ -97,7 +98,7 @@ export default function ResetPasswordRequestPage() {
         <p className="mt-4 text-xs text-slate-400">
           Remembered it?{" "}
           <a
-            href="/login"
+            href="/auth/login"
             className="text-primary-hover hover:text-emerald-300 underline underline-offset-2"
           >
             Go back to login

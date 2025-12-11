@@ -2,9 +2,10 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase/client";
+import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 
 export default function ResetPasswordUpdatePage() {
+  const [supabase] = useState(() => createBrowserSupabaseClient());
   const router = useRouter();
   const [newPassword, setNewPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -26,7 +27,7 @@ export default function ResetPasswordUpdatePage() {
       }
     };
     checkSession();
-  }, []);
+  }, [supabase.auth]);
 
   const handleUpdatePassword = async (e: FormEvent) => {
     e.preventDefault();
@@ -59,7 +60,7 @@ export default function ResetPasswordUpdatePage() {
     setSuccessMsg("Password updated successfully. You can now log in.");
     // Optional auto-redirect after a delay
     setTimeout(() => {
-      router.push("/login");
+      router.push("/auth/login");
     }, 1500);
   };
 

@@ -125,7 +125,7 @@ export default function SignupPage() {
           Already have an account?{" "}
           <button
             type="button"
-            onClick={() => router.push("/login")}
+            onClick={() => router.push("/auth/login")}
             className="text-primary-hover hover:text-emerald-300 underline underline-offset-2"
           >
             Log in

@@ -18,16 +18,16 @@ export default function HomePage() {
 
         <div className="flex flex-wrap gap-3">
           <a
-            href="/signup"
+            href="auth/signup"
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-slate-950 shadow-sm hover:bg-primary-hover transition"
           >
-            Start building your site
+            Get started
           </a>
           <a
-            href="/login"
+            href="auth/login"
             className="inline-flex items-center justify-center rounded-md border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-100 hover:border-primary hover:text-primary-hover transition"
           >
-            Continue where I left off
+            Log in
           </a>
         </div>
 
