@@ -3,23 +3,26 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/providers";
-import { supabase } from "@/lib/supabaseClient";
+import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 import Image from "next/image";
+import { useState } from "react";
 
 export function Navbar() {
   const router = useRouter();
   const { user, loading } = useAuth();
+  const [supabase] = useState(() => createBrowserSupabaseClient());
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    router.push("/login");
+    // 👇 match your actual route structure
+    router.push("/auth/login");
   };
 
   return (
     <header className="border-b border-slate-800 bg-bg-card backdrop-blur">
       <nav className="max-w-5xl mx-auto flex items-center justify-between px-4 py-3">
         <Link href="/" className="flex items-center gap-2">
-          <div className="h-8 w-8  overflow-hidden">
+          <div className="h-8 w-8 overflow-hidden">
             <Image
               src="/img.jpeg"
               alt="ForlessAI Logo"
@@ -69,11 +72,14 @@ export function Navbar() {
             </>
           ) : (
             <>
-              <Link href="/login" className="text-slate-300 hover:text-white">
+              <Link
+                href="/auth/login"
+                className="text-slate-300 hover:text-white"
+              >
                 Login
               </Link>
               <Link
-                href="/signup"
+                href="/auth/signup"
                 className="rounded-md bg-primary px-3 py-1 text-slate-950 font-semibold hover:bg-primary-hover transition text-xs sm:text-sm"
               >
                 Sign up

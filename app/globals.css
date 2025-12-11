@@ -22,8 +22,8 @@
   .input-base {
     @apply mt-1 w-full rounded-md border border-slate-700 bg-slate-900
            px-2 py-1 text-xs 
-           focus:ring-1 focus:ring-primary-hover 
            focus:outline-none 
+           focus:border-primary
            transition-all;
   }
 }
@@ -44,9 +44,9 @@
   --font-sans: Arial, Helvetica, sans-serif;
 } */
 
-/* ===============================
-   DARK MODE OVERRIDES
-   =============================== */
+
+
+/* dark mode */
 .dark {
   --color-primary: #22c55e;
   --color-primary-hover: #4ade80;

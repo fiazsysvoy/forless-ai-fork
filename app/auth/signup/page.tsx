@@ -2,10 +2,11 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabaseClient";
+import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 
 export default function SignupPage() {
   const router = useRouter();
+  const [supabase] = useState(() => createBrowserSupabaseClient());
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");

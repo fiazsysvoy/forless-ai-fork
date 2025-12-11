@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/supabase/client";
 
 export default function ResetPasswordRequestPage() {
   const [email, setEmail] = useState("");

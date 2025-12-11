@@ -2,10 +2,12 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabaseClient";
+import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
   const router = useRouter();
+  const [supabase] = useState(() => createBrowserSupabaseClient());
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -108,7 +110,7 @@ export default function LoginPage() {
           Dont have an account?{" "}
           <button
             type="button"
-            onClick={() => router.push("/signup")}
+            onClick={() => router.push("/auth/signup")}
             className="text-primary-hover hover:text-emerald-300 underline underline-offset-2"
           >
             Sign up
