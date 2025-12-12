@@ -62,7 +62,7 @@ export default function ProjectContent({ project }: { project: ProjectRow }) {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="self-start rounded-md bg-primary px-4 py-1.5 text-xs font-medium text-slate-950 disabled:opacity-60"
+          className="self-start btn-fill disabled:opacity-60"
         >
           {saving ? "Saving…" : "Save changes"}
         </button>

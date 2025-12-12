@@ -24,8 +24,7 @@ export default function NewProjectButton() {
       const res = await fetch("/api/projects", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // For now we only send `name` so it matches your existing API.
-        body: JSON.stringify({ projectName: trimmedName }),
+        body: JSON.stringify({ name: trimmedName, description: projectIdea }),
       });
 
       if (!res.ok) {
