@@ -1,7 +1,15 @@
 // app/dashboard/page.tsx
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import NewProjectButton from "@/app/dashboard/components/dashboard/NewProjectButton";
+import DashboardContent from "./_components/DashboardContent";
+
+type ProjectRow = {
+  id: string;
+  name: string | null;
+  status: string | null;
+  thumbnail_url: string | null;
+  updated_at: string | null;
+};
 
 export default async function DashboardPage() {
   const supabase = await createServerSupabaseClient();
@@ -24,33 +32,18 @@ export default async function DashboardPage() {
     console.error("Dashboard projects error:", error);
   }
 
+  const safeProjects: ProjectRow[] = projects ?? [];
+
+  // Basic stats for now (we can wire real ones later)
+  const stats = {
+    totalProjects: safeProjects.length,
+    publishedSites: safeProjects.filter((p) => p.status === "published").length,
+    campaignsCreated: 0, //for now
+  };
+
   return (
-    <div className="p-8 space-y-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Your Projects</h1>
-        <NewProjectButton />
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {(projects ?? []).map((project) => (
-          <a
-            key={project.id}
-            href={`/website-builder?projectId=${project.id}`}
-            className="rounded-lg border border-slate-800 bg-slate-900/60 p-4 hover:border-emerald-500 transition"
-          >
-            <div className="font-medium">{project.name}</div>
-            <div className="mt-1 text-xs text-slate-400">
-              Status: {project.status}
-            </div>
-          </a>
-        ))}
-      </div>
-
-      {(!projects || projects.length === 0) && (
-        <p className="text-sm text-slate-400">
-          No projects yet. Click &quot;New Project&quot; to create one.
-        </p>
-      )}
+    <div className="min-h-screen bg-slate-950 text-slate-50">
+      <DashboardContent projects={safeProjects} stats={stats} />
     </div>
   );
 }

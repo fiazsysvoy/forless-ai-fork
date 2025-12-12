@@ -1,8 +1,6 @@
 @import "tailwindcss";
 
-/* ===============================
-   BASE THEME (LIGHT / DEFAULT)
-   =============================== */
+/* project theme */
 @theme {
   --color-primary: #10b981;
   --color-primary-hover: #34d399;
@@ -25,6 +23,9 @@
            focus:outline-none 
            focus:border-primary
            transition-all;
+  }
+  .btn-fill{
+    @apply   rounded-md bg-primary  py-1 px-4  text-sm  text-slate-950 shadow-sm hover:bg-primary-hover cursor-pointer
   }
 }
 

@@ -60,14 +60,18 @@ export function Navbar() {
             <span className="text-slate-500 text-xs">Checking auth…</span>
           ) : user ? (
             <>
-              <span className="hidden sm:inline text-slate-400 text-xs">
-                {user.email?.split("@")[0]}
-              </span>
               <button
                 onClick={handleLogout}
-                className="rounded-md bg-slate-800 px-3 py-1 text-xs font-semibold text-slate-100 hover:bg-slate-700"
+                className="text-slate-300 hover:text-white"
               >
                 Logout
+              </button>
+              <button className="flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs">
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-700 text-[10px]">
+                  {user.email?.slice(0, 1).toUpperCase()}
+                </span>
+                <span className="hidden sm:inline">{user.email}</span>
+                <span className="text-[10px] text-slate-400">▾</span>
               </button>
             </>
           ) : (

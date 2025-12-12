@@ -200,7 +200,7 @@ export default function WebsiteBuilderPage() {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="w-full rounded-full bg-emerald-500 px-3 py-1.5 text-xs font-semibold text-slate-950 disabled:opacity-60"
+              className="w-full rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-slate-950 disabled:opacity-60"
             >
               {saving ? "Saving..." : "Save website"}
             </button>
