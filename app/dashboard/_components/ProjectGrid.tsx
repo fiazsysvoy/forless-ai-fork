@@ -57,9 +57,10 @@ function ProjectCard({ project }: { project: ProjectRow }) {
 
   return (
     <Link
-      href={`/website-builder?projectId=${project.id}`}
+      href={`/dashboard/projects/${project.id}`}
       className="group flex flex-col rounded-lg border border-slate-800 bg-slate-900/60 p-3 text-xs transition hover:border-primary hover:bg-slate-900"
     >
+      {/* for image will add later */}
       <div className="h-24 rounded-md bg-linear-to-br from-slate-800 to-slate-900" />
 
       <div className="mt-3 flex items-start justify-between gap-2">
