@@ -35,23 +35,43 @@ export default function BrandGenerator({ projectId, projectName }: Props) {
     [selectedFontId]
   );
 
-  function handleGenerate() {
+  async function handleGenerate() {
     if (!idea.trim()) {
       alert("Please describe your business idea first.");
       return;
     }
 
     setLoading(true);
+    try {
+      const res = await fetch("/api/brand/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idea }),
+      });
 
-    const options = generateBrandOptions(
-      idea,
-      selectedPalette.primary,
-      selectedPalette.secondary,
-      selectedFont.css
-    );
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        alert(json.error || "Failed to generate");
+        return;
+      }
 
-    setGenerated(options);
-    setLoading(false);
+      // json.brands => [{name,slogan}...]
+      // then you attach palette + font locally just like before
+      const options: BrandOption[] = (json.brands as any[])
+        .slice(0, 3)
+        .map((b, idx) => ({
+          id: `brand-${idx}`,
+          name: String(b.name ?? "Untitled"),
+          slogan: String(b.slogan ?? ""),
+          primaryColor: selectedPalette.primary,
+          secondaryColor: selectedPalette.secondary,
+          font: selectedFont.css,
+        }));
+
+      setGenerated(options);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function handleUse(option: BrandOption) {
