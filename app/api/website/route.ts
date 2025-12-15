@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import type { WebsiteData } from "@/lib/websiteTypes";
+import { fetchUnsplashImage } from "@/lib/unsplash";
 
 const postSchema = z.object({
   projectId: z.string().uuid(),
@@ -85,6 +86,15 @@ export async function POST(req: Request) {
     )
     .select()
     .single();
+
+  const heroQuery = data.hero?.imageQuery ?? "";
+  const heroUrl = heroQuery ? await fetchUnsplashImage(heroQuery) : null;
+
+  await supabase
+    .from("projects")
+    .update({ thumbnail_url: heroUrl })
+    .eq("id", projectId)
+    .eq("user_id", user.id);
 
   if (error) {
     console.error("Supabase upsert error:", error);

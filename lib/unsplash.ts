@@ -1,9 +1,10 @@
 export async function fetchUnsplashImage(query: string): Promise<string> {
-  const accessKey = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
+  const accessKey =
+    process.env.UNSPLASH_ACCESS_KEY ||
+    process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
 
-  // 🔹 Safe fallback image (always allowed by next/image)
   const fallback =
-    "https://images.unsplash.com/photo-1526045612212-70caf35c14df?fit=crop&w=1200&q=80";
+    "https://images.unsplash.com/photo-1526045612212-70caf35c14df?fit=crop&w=1200&h=675&q=80";
 
   if (!accessKey) {
     console.warn("Unsplash access key missing");
@@ -15,15 +16,15 @@ export async function fetchUnsplashImage(query: string): Promise<string> {
   )}&client_id=${accessKey}&per_page=1`;
 
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, { cache: "no-store" });
     const data = await res.json();
 
-    // 🔥 If we got a valid image
     if (data?.results?.length > 0) {
-      return data.results[0].urls.regular;
+      const img = data.results[0].urls.raw;
+
+      return `${img}&fit=crop&w=1200&h=675&q=80`;
     }
 
-    // 🔥  no results, fallback to safe Unsplash domain
     return fallback;
   } catch (error) {
     console.error("Unsplash fetch error:", error);

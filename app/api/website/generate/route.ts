@@ -41,7 +41,6 @@ Rules:
 {
   "type": "${websiteType}",
   "brandName": string,
-  "tagline": string,
   "hero": {
     "headline": string,
     "subheadline": string,

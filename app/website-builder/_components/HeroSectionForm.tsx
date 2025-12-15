@@ -4,7 +4,7 @@ import { WebsiteData, WebsiteType } from "@/lib/websiteTypes";
 
 export type HeroSectionFormProps = {
   // type: WebsiteType;
-  onTypeChange: (t: WebsiteType) => void;
+  // onTypeChange: (t: WebsiteType) => void;
   data: WebsiteData;
   setData: React.Dispatch<React.SetStateAction<WebsiteData>>;
 };
@@ -56,7 +56,7 @@ export function HeroSectionForm({
       <label className="block text-xs text-slate-400">
         Tagline
         <input
-          value={data.tagline}
+          value={data.tagline ?? ""}
           onChange={(e) => setData((d) => ({ ...d, tagline: e.target.value }))}
           className="input-base"
         />

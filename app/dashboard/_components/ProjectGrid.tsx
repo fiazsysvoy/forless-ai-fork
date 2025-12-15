@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { ProjectRow } from "../types";
+import Image from "next/image";
 
 export default function ProjectGrid({
   projects,
@@ -61,7 +62,22 @@ function ProjectCard({ project }: { project: ProjectRow }) {
       className="group flex flex-col rounded-lg border border-slate-800 bg-slate-900/60 p-3 text-xs transition hover:border-primary hover:bg-slate-900"
     >
       {/* for image will add later */}
-      <div className="h-24 rounded-md bg-linear-to-br from-slate-800 to-slate-900" />
+
+      <div className="h-24 overflow-hidden rounded-md border border-slate-800 bg-slate-900">
+        {project.thumbnail_url ? (
+          <Image
+            src={project.thumbnail_url}
+            alt={name}
+            className="h-full w-full object-cover"
+            loading="lazy"
+            width={200}
+            height={200}
+          />
+        ) : (
+          // <span>{project.thumbnail_url}</span>
+          <div className="h-full w-full bg-linear-to-br from-slate-800 to-slate-900" />
+        )}
+      </div>
 
       <div className="mt-3 flex items-start justify-between gap-2">
         <div>

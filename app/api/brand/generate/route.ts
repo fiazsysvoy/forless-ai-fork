@@ -12,7 +12,7 @@ export async function POST(req: Request) {
 
     // Responses API (recommended for new projects) :contentReference[oaicite:3]{index=3}
     const resp = await openai.responses.create({
-      model: "gpt-4.1-mini",
+      model: "gpt-4o-mini",
       input: [
         {
           role: "system",
@@ -48,7 +48,7 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json(parsed);
-  } catch (err: any) {
+  } catch (err) {
     console.error("brand/generate error:", err);
     return NextResponse.json(
       { error: "Failed to generate brands" },
