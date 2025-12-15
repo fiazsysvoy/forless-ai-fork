@@ -27,7 +27,7 @@ export default async function BrandPage({ searchParams }: PageProps) {
   // Optional: verify project belongs to user (can skip if you want)
   const { data: project } = await supabase
     .from("projects")
-    .select("id, name")
+    .select("id, name, description")
     .eq("id", projectId)
     .eq("user_id", user.id)
     .single();
@@ -39,7 +39,10 @@ export default async function BrandPage({ searchParams }: PageProps) {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50">
       <div className="mx-auto max-w-5xl px-4 py-8">
-        <BrandGenerator projectId={projectId} projectName={project.name} />
+        <BrandGenerator
+          projectId={projectId}
+          projectIdea={project.description}
+        />
       </div>
     </div>
   );

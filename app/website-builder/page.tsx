@@ -51,6 +51,7 @@ export default function WebsiteBuilderPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
+  const [generating, setGenerating] = useState<boolean>(false);
 
   const currentIndex = builderSections.findIndex((s) => s.id === section);
   const isFirst = currentIndex === 0;
@@ -115,6 +116,42 @@ export default function WebsiteBuilderPage() {
     load();
   }, [projectId]);
 
+  async function handleGenerateWebsite() {
+    if (!projectId) return;
+
+    try {
+      setGenerating(true);
+
+      // Fetch project brand_data (you already do this; use `brand` state)
+      const idea = data.brandName || "A modern business"; // or keep a separate "project idea" later
+
+      const res = await fetch("/api/website/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          websiteType: type,
+          idea,
+          brand, // brand_data object
+        }),
+      });
+
+      const json = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        alert(json.error || "Failed to generate website");
+        return;
+      }
+
+      // apply generated website data
+      const generated = json.data as WebsiteData;
+      setData(generated);
+      setType(generated.type);
+      setSection("hero");
+    } finally {
+      handleSave();
+      setGenerating(false);
+    }
+  }
   const handleSave = async () => {
     if (!projectId) {
       setSaveMessage("No projectId provided in URL");

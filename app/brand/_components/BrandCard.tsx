@@ -1,15 +1,27 @@
-// app/brand/_components/BrandCard.tsx
 "use client";
 
+import { useState } from "react";
 import type { BrandOption } from "@/app/brand/brandConfig";
 import LogoSvg from "./LogoSvg";
 
 interface BrandCardProps {
   option: BrandOption;
-  onUse: () => void;
+  onUse: (option: BrandOption) => Promise<void>;
 }
 
 export default function BrandCard({ option, onUse }: BrandCardProps) {
+  const [loading, setLoading] = useState(false);
+
+  async function handleClick() {
+    if (loading) return;
+    try {
+      setLoading(true);
+      await onUse(option);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div className="flex h-full flex-col justify-between rounded-lg border border-slate-800 bg-slate-900/60 p-3 text-xs">
       <div className="space-y-2">
@@ -47,10 +59,11 @@ export default function BrandCard({ option, onUse }: BrandCardProps) {
 
       <button
         type="button"
-        onClick={onUse}
-        className="mt-3 w-full rounded-md bg-primary px-3 py-1.5 text-[11px] font-medium text-slate-950"
+        onClick={handleClick}
+        disabled={loading}
+        className="mt-3 w-full rounded-md bg-primary px-3 py-1.5 text-[11px] font-medium text-slate-950 disabled:opacity-60"
       >
-        Use this brand
+        {loading ? "Creating website..." : "Use this brand"}
       </button>
     </div>
   );
