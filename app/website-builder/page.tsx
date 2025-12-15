@@ -2,7 +2,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { WebsiteTemplateBasic } from "@/components/website/WebsiteTemplateBasic";
+import { WebsiteTemplateBasic } from "@/components/websiteTemplates/Template1/WebsiteTemplateBasic";
 import { useWebsiteBuilder } from "./hooks/useWebsiteBuilder";
 import { BuilderSidebar } from "./_components/BuilderSidebar";
 

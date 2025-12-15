@@ -11,6 +11,12 @@ import {
 } from "@/app/brand/brandConfig";
 import BrandControls from "./BrandControls";
 import BrandOptionsList from "./BrandOptionsList";
+import {
+  apiGenerateBrand,
+  apiSaveProjectBrand,
+  type BrandPayload,
+} from "@/lib/api/brand";
+import { apiGenerateWebsite, apiSaveWebsite } from "@/lib/api/website";
 
 interface Props {
   projectId: string;
@@ -43,101 +49,60 @@ export default function BrandGenerator({ projectId, projectIdea }: Props) {
 
     setLoading(true);
     try {
-      const res = await fetch("/api/brand/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idea }),
-      });
+      const rawBrands = await apiGenerateBrand(idea);
 
-      const json = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        alert(json.error || "Failed to generate");
-        return;
-      }
-
-      // json.brands => [{name,slogan}...]
-      // then you attach palette + font locally just like before
-      const options: BrandOption[] = (json.brands as any[])
-        .slice(0, 3)
-        .map((b, idx) => ({
-          id: `brand-${idx}`,
-          name: String(b.name ?? "Untitled"),
-          slogan: String(b.slogan ?? ""),
-          primaryColor: selectedPalette.primary,
-          secondaryColor: selectedPalette.secondary,
-          font: selectedFont.css,
-        }));
+      const options: BrandOption[] = rawBrands.slice(0, 3).map((b, idx) => ({
+        id: `brand-${idx}`,
+        name: String(b.name ?? "Untitled"),
+        slogan: String(b.slogan ?? ""),
+        primaryColor: selectedPalette.primary,
+        secondaryColor: selectedPalette.secondary,
+        font: selectedFont.css,
+      }));
 
       setGenerated(options);
+    } catch (err) {
+      console.error(err);
+      alert(err instanceof Error ? err.message : "Failed to generate brand");
     } finally {
       setLoading(false);
     }
   }
 
   async function handleUse(option: BrandOption) {
-    // 1) Save brand_data
-    const brandPayload = {
-      name: option.name,
-      slogan: option.slogan,
-      palette: {
-        primary: option.primaryColor,
-        secondary: option.secondaryColor,
-      },
-      font: { id: selectedFontId, css: option.font },
-    };
+    try {
+      // 1) Save brand_data
+      const brandPayload: BrandPayload = {
+        name: option.name,
+        slogan: option.slogan,
+        palette: {
+          primary: option.primaryColor,
+          secondary: option.secondaryColor,
+        },
+        font: { id: selectedFontId, css: option.font },
+      };
 
-    const saveBrandRes = await fetch(`/api/projects/${projectId}/brand`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(brandPayload),
-    });
+      await apiSaveProjectBrand(projectId, brandPayload);
 
-    if (!saveBrandRes.ok) {
-      const j = await saveBrandRes.json().catch(() => ({}));
-      alert(j.error || "Failed to save brand");
-      return;
-    }
+      // 2) Generate website JSON
+      const businessIdea =
+        idea.trim() || `${brandPayload.name} - ${brandPayload.slogan}`;
 
-    // 2) Generate website JSON (OpenAI)
-    // idea: use text area "idea" OR brand name/slogan as fallback
-    const businessIdea =
-      idea.trim() || `${brandPayload.name} - ${brandPayload.slogan}`;
-
-    const genRes = await fetch("/api/website/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        websiteType: "product", // or let user pick, or infer later
+      const websiteData = await apiGenerateWebsite({
         idea: businessIdea,
         brand: brandPayload,
-      }),
-    });
+        // websiteType: "product", // keep for future if needed
+      });
 
-    const genJson = await genRes.json().catch(() => ({}));
+      // 3) Save generated website to DB
+      await apiSaveWebsite(projectId, websiteData);
 
-    if (!genRes.ok || !genJson.data) {
-      alert(genJson.error || "Failed to generate website");
-      return;
+      // 4) Go to builder
+      router.push(`/website-builder?projectId=${projectId}`);
+    } catch (err) {
+      console.error(err);
+      alert(err instanceof Error ? err.message : "Something went wrong");
     }
-
-    // 3) Save generated website to DB
-    const saveSiteRes = await fetch("/api/website", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        projectId,
-        data: genJson.data,
-      }),
-    });
-
-    if (!saveSiteRes.ok) {
-      const j = await saveSiteRes.json().catch(() => ({}));
-      alert(j.error || "Failed to save website");
-      return;
-    }
-
-    // 4) Go to builder (it will load the saved website)
-    router.push(`/website-builder?projectId=${projectId}`);
   }
 
   return (

@@ -4,6 +4,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import type { ProjectRow } from "@/app/dashboard/types"; // or "../_types"
+import { apiUpdateProject } from "@/lib/api/project";
 
 export default function ProjectContent({ project }: { project: ProjectRow }) {
   const [name, setName] = useState(project.name ?? "");
@@ -11,18 +12,15 @@ export default function ProjectContent({ project }: { project: ProjectRow }) {
   const [saving, setSaving] = useState(false);
 
   async function handleSave() {
+    if (saving) return;
+
     setSaving(true);
     try {
-      const res = await fetch(`/api/projects/${project.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, status }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        alert(data.error || "Failed to update project");
-      }
+      await apiUpdateProject(project.id, { name, status });
+      // you can optionally show a toast or small "Saved" state heres
+    } catch (err) {
+      console.error(err);
+      alert(err instanceof Error ? err.message : "Failed to update project");
     } finally {
       setSaving(false);
     }

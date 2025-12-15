@@ -2,7 +2,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-import type { WebsiteData } from "@/lib/websiteTypes";
+import type { WebsiteData } from "@/lib/types/websiteTypes";
 import { fetchUnsplashImage } from "@/lib/unsplash";
 
 const postSchema = z.object({

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { openai } from "@/lib/openai";
-import type { WebsiteData } from "@/lib/websiteTypes";
+import type { WebsiteData } from "@/lib/types/websiteTypes";
 
 type BrandData = {
   name?: string;

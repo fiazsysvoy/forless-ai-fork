@@ -2,7 +2,7 @@
 "use client";
 
 import type React from "react";
-import { WebsiteData } from "@/lib/websiteTypes";
+import { WebsiteData } from "@/lib/types/websiteTypes";
 import type { Theme } from "./theme";
 import { resolveTheme } from "./theme";
 

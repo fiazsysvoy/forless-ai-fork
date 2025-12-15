@@ -2,8 +2,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { apiCreateProject } from "@/lib/api/project";
 
 export default function NewProjectButton() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [projectIdea, setProjectIdea] = useState("");
@@ -21,23 +24,21 @@ export default function NewProjectButton() {
     try {
       setLoading(true);
 
-      const res = await fetch("/api/projects", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: trimmedName, description: projectIdea }),
+      await apiCreateProject({
+        name: trimmedName,
+        description: projectIdea || undefined,
       });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        alert(data.error || "Failed to create project");
-        return;
-      }
 
       // Close modal + refresh dashboard
       setModalOpen(false);
       setProjectIdea("");
       setProjectName("");
-      window.location.reload();
+
+      // Prefer router.refresh() over window.location.reload()
+      router.refresh();
+    } catch (err) {
+      console.error(err);
+      alert(err instanceof Error ? err.message : "Failed to create project");
     } finally {
       setLoading(false);
     }
@@ -58,8 +59,8 @@ export default function NewProjectButton() {
           <div className="w-full max-w-md rounded-xl border border-slate-800 bg-slate-950 p-4 text-xs text-slate-50">
             <h2 className="text-sm font-medium">Describe your business idea</h2>
             <p className="mt-1 text-[11px] text-slate-400">
-              Describe your business idea in a few sentences. and let the ai do
-              rest for you
+              Describe your business idea in a few sentences, and let the AI do
+              the rest for you.
             </p>
 
             <label className="mt-3 block text-[11px] text-slate-300">

@@ -1,6 +1,6 @@
 "use client";
 
-import { WebsiteData } from "@/lib/websiteTypes";
+import { WebsiteData } from "@/lib/types/websiteTypes";
 
 export type AboutSectionFormProps = {
   data: WebsiteData;

@@ -1,6 +1,6 @@
 "use client";
 
-import { WebsiteData, WebsiteType } from "@/lib/websiteTypes";
+import { WebsiteData } from "@/lib/types/websiteTypes";
 
 export type HeroSectionFormProps = {
   // type: WebsiteType;

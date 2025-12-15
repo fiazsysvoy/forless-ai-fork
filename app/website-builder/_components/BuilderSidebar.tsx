@@ -2,7 +2,7 @@
 "use client";
 
 import type { Dispatch, SetStateAction } from "react";
-import type { WebsiteData } from "@/lib/websiteTypes";
+import type { WebsiteData } from "@/lib/types/websiteTypes";
 import type { BuilderSection } from "../builderSections";
 
 import { HeroSectionForm } from "./HeroSectionForm";
@@ -66,7 +66,7 @@ export function BuilderSidebar({
           onClick={onGenerate}
           disabled={generating}
         >
-          {generating ? "Generating..." : "Generate"}
+          {generating ? "Generating..." : "Re-Generate"}
         </button>
       </div>
 

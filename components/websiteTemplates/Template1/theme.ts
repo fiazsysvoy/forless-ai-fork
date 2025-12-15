@@ -45,7 +45,7 @@ export function cssVar(name: string, value: string): React.CSSProperties {
 // Supports hex ("#rrggbb") or CSS var string ("var(--color-primary)")
 export function withAlpha(color: string, alpha: number): string {
   if (color.startsWith("var(")) {
-    // can't compute rgba from css var without extra work; use it as-is
+    //if variable use as it is
     return color;
   }
   const rgb = hexToRgb(color);

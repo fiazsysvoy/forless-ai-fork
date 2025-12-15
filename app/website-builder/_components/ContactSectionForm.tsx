@@ -1,6 +1,6 @@
 "use client";
 
-import { WebsiteData } from "@/lib/websiteTypes";
+import { WebsiteData } from "@/lib/types/websiteTypes";
 
 type ContactSectionFormProps = {
   data: WebsiteData;
