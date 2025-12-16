@@ -1,6 +1,6 @@
 "use client";
 
-import NewProjectButton from "./NewProjectButton";
+import NewProjectModal from "./NewProjectModal";
 
 interface DashboardHeaderProps {
   search: string;
@@ -25,7 +25,7 @@ export default function DashboardHeader({
           <SearchInput value={search} onChange={onSearchChange} />
         </div>
 
-        <NewProjectButton />
+        <NewProjectModal />
       </div>
     </header>
   );

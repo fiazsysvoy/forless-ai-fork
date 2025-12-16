@@ -116,3 +116,18 @@ export async function apiSaveProjectBrand(
 
   return json as { success: true; brand_data: BrandData };
 }
+export async function apiCreateAndGenerateProject(payload: {
+  name: string;
+  idea: string;
+}): Promise<{ success: true; project: { id: string } }> {
+  const res = await fetch("/api/projects/create-and-generate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  const json = await res.json().catch(() => ({} as any));
+  if (!res.ok) throw new Error(json.error || "Failed to create + generate");
+
+  return json;
+}

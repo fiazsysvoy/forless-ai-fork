@@ -58,7 +58,8 @@ function ProjectCard({ project }: { project: ProjectRow }) {
 
   return (
     <Link
-      href={`/dashboard/projects/${project.id}`}
+      // href={`/dashboard/projects/${project.id}`}
+      href={`/website-builder?projectId=${project.id}`}
       className="group flex flex-col rounded-lg border border-slate-800 bg-slate-900/60 p-3 text-xs transition hover:border-primary hover:bg-slate-900"
     >
       <div className="h-28 overflow-hidden rounded-md border border-slate-800 bg-slate-900">

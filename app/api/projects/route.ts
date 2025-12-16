@@ -36,7 +36,6 @@ export async function GET() {
 
   return NextResponse.json({ projects: data ?? [] });
 }
-
 export async function POST(req: Request) {
   const supabase = await createServerSupabaseClient();
 

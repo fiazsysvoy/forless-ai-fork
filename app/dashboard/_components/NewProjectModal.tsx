@@ -3,9 +3,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { apiCreateProject } from "@/lib/api/project";
+import {
+  apiCreateAndGenerateProject,
+  apiCreateProject,
+} from "@/lib/api/project";
 
-export default function NewProjectButton() {
+export default function NewProjectModal() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -39,6 +42,45 @@ export default function NewProjectButton() {
     } catch (err) {
       console.error(err);
       alert(err instanceof Error ? err.message : "Failed to create project");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  //for create and generate direct from dashboard
+  async function handleCreateAndGenerate() {
+    if (loading) return;
+
+    const trimmedName = projectName.trim();
+    const trimmedIdea = projectIdea.trim();
+
+    if (!trimmedName) {
+      alert("Please enter a project name.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const result = await apiCreateAndGenerateProject({
+        name: trimmedName,
+        idea: trimmedIdea || trimmedName,
+      });
+
+      // Close modal
+      setModalOpen(false);
+      setProjectIdea("");
+      setProjectName("");
+
+      // Go straight to builder
+      router.push(`/website-builder?projectId=${result.project.id}`);
+    } catch (err) {
+      console.error(err);
+      alert(
+        err instanceof Error
+          ? err.message
+          : "Failed to create & generate website"
+      );
     } finally {
       setLoading(false);
     }
@@ -94,7 +136,7 @@ export default function NewProjectButton() {
               </button>
               <button
                 type="button"
-                onClick={handleCreate}
+                onClick={handleCreateAndGenerate}
                 disabled={loading}
                 className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-slate-950 hover:bg-emerald-400 disabled:opacity-60"
               >
