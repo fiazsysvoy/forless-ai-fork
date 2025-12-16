@@ -81,3 +81,40 @@ export async function GET(req: Request, context: RouteContext) {
 
   return NextResponse.json({ project: data });
 }
+export async function DELETE(
+  _req: Request,
+  context: { params: Promise<{ projectId: string }> }
+) {
+  const { projectId } = await context.params;
+
+  if (!projectId) {
+    return NextResponse.json({ error: "Missing project id" }, { status: 400 });
+  }
+
+  const supabase = await createServerSupabaseClient();
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { error } = await supabase
+    .from("projects")
+    .delete()
+    .eq("id", projectId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    console.error("DELETE projects error:", error);
+    return NextResponse.json(
+      { error: error.message, code: error.code },
+      { status: 500 }
+    );
+  }
+
+  return NextResponse.json({ success: true });
+}

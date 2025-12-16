@@ -12,6 +12,92 @@ const Schema = z.object({
   websiteType: z.string().optional(),
 });
 
+//  output shape
+type AiOut = {
+  brand: { name: string; slogan: string };
+  website: {
+    type: string;
+    hero: {
+      subheadline: string;
+      primaryCta: string;
+      secondaryCta: string;
+      imageQuery: string;
+    };
+    about: { title: string; body: string; imageQuery: string };
+    features: {
+      title: string;
+      items: { label: string; description: string }[];
+    };
+    offers: {
+      title: string;
+      items: { name: string; description: string; priceLabel: string }[];
+    };
+    contact: {
+      title: string;
+      description: string;
+      email: string;
+      phone: string;
+      whatsapp: string;
+    };
+    finalCta: { headline: string; subheadline: string; buttonLabel: string };
+  };
+};
+
+function toWebsiteData(ai: AiOut, websiteType: string): WebsiteData {
+  const brandName = ai.brand.name;
+  const slogan = ai.brand.slogan;
+
+  return {
+    type: websiteType,
+    brandName, // server-side
+    hero: {
+      headline: slogan, // server-side
+      subheadline: ai.website.hero.subheadline ?? "",
+      primaryCta: ai.website.hero.primaryCta ?? "",
+      primaryCtaLink: "#", // server-side
+      secondaryCta: ai.website.hero.secondaryCta ?? "",
+      secondaryCtaLink: "#", // server-side
+      imageQuery: ai.website.hero.imageQuery ?? "",
+    },
+    about: {
+      title: ai.website.about.title ?? "",
+      body: ai.website.about.body ?? "",
+      imageQuery: ai.website.about.imageQuery ?? "",
+    },
+    features: {
+      title: ai.website.features.title ?? "",
+      items: Array.isArray(ai.website.features.items)
+        ? ai.website.features.items.map((x) => ({
+            label: String(x?.label ?? ""),
+            description: String(x?.description ?? ""),
+          }))
+        : [],
+    },
+    offers: {
+      title: ai.website.offers.title ?? "",
+      items: Array.isArray(ai.website.offers.items)
+        ? ai.website.offers.items.map((x) => ({
+            name: String(x?.name ?? ""),
+            description: String(x?.description ?? ""),
+            priceLabel: String(x?.priceLabel ?? ""),
+          }))
+        : [],
+    },
+    contact: {
+      title: ai.website.contact.title ?? "",
+      description: ai.website.contact.description ?? "",
+      email: ai.website.contact.email ?? "hello@brand.com",
+      phone: ai.website.contact.phone ?? "+1 555 000 0000",
+      whatsapp: ai.website.contact.whatsapp ?? "+1 555 000 0000",
+    },
+    finalCta: {
+      headline: ai.website.finalCta.headline ?? "",
+      subheadline: ai.website.finalCta.subheadline ?? "",
+      buttonLabel: ai.website.finalCta.buttonLabel ?? "",
+    },
+  };
+}
+
 export async function POST(req: Request) {
   const supabase = await createServerSupabaseClient();
 
@@ -35,6 +121,7 @@ export async function POST(req: Request) {
   }
 
   const { name, idea, websiteType } = parsed.data;
+  const type = websiteType || "product";
 
   // 1) Create project
   const { data: project, error: createErr } = await supabase
@@ -56,76 +143,50 @@ export async function POST(req: Request) {
     );
   }
 
-  // 2) ONE OpenAI call → brand + website together
+  // 2) One OpenAI call (smaller prompt + smaller response)
   const resp = await openai.responses.create({
-    model: "gpt-4.1-mini",
+    model: "gpt-4o-mini",
     input: [
       {
         role: "system",
-        content:
-          "Return ONLY strict JSON. No markdown. No explanation. Follow the schema exactly.",
+        content: "Return only valid JSON. No markdown. No extra text",
       },
       {
         role: "user",
         content: `
-Business idea: ${idea}
+Idea: ${idea}
 
-Return JSON with EXACT shape:
+Return JSON EXACTLY:
 {
-  "brand": {
-    "name": string,
-    "slogan": string,
-    "palette": { "primary": string, "secondary": string } | null,
-    "font": { "id": string, "css": string } | null
-  },
+  "brand": { "name": string, "slogan": string },
   "website": {
-    "type": "${websiteType || "product"}",
-    "brandName": string,
-    "hero": {
-      "headline": string,
-      "subheadline": string,
-      "primaryCta": string,
-      "primaryCtaLink": "#",
-      "secondaryCta": string,
-      "secondaryCtaLink": "#",
-      "imageQuery": string
-    },
+    "type": "${type}",
+    "hero": { "subheadline": string, "primaryCta": string, "secondaryCta": string, "imageQuery": string },
     "about": { "title": string, "body": string, "imageQuery": string },
     "features": { "title": string, "items": [{ "label": string, "description": string }] },
     "offers": { "title": string, "items": [{ "name": string, "description": string, "priceLabel": string }] },
-    "contact": {
-      "title": string,
-      "description": string,
-      "email": string,
-      "phone": string,
-      "whatsapp": string
-    },
+    "contact": { "title": string, "description": string, "email": string, "phone": string, "whatsapp": string },
     "finalCta": { "headline": string, "subheadline": string, "buttonLabel": string }
   }
 }
 
 Rules:
-- website.brandName MUST equal brand.name
-- Keep text short and realistic
-- Use placeholders for email/phone if unknown
+- Keep copy short.
+- Use placeholders if unknown.
+-imageQuery must be a short Unsplash search phrase (1–2 words), generic and visual
         `.trim(),
       },
     ],
   });
 
   const text = resp.output_text || "";
-  let parsedAI: {
-    brand: {
-      name: string;
-      slogan: string;
-      palette: { primary: string; secondary: string } | null;
-      font: { id: string; css: string } | null;
-    };
-    website: WebsiteData;
-  };
+  console.log("usage: ", resp.usage);
+  console.log("usage: ", resp.model);
+
+  let ai: AiOut;
 
   try {
-    parsedAI = JSON.parse(text);
+    ai = JSON.parse(text);
   } catch {
     return NextResponse.json(
       { error: "Invalid AI JSON", raw: text },
@@ -133,15 +194,28 @@ Rules:
     );
   }
 
-  if (!parsedAI?.brand?.name || !parsedAI?.website?.hero) {
+  if (!ai?.brand?.name || !ai?.brand?.slogan || !ai?.website?.hero) {
     return NextResponse.json(
-      { error: "Incomplete AI response", raw: parsedAI },
+      { error: "Incomplete AI response", raw: ai },
       { status: 500 }
     );
   }
 
-  const brand_data = parsedAI.brand;
-  const websiteData = parsedAI.website;
+  // Server-side computed values
+  const brand_data = {
+    name: ai.brand.name.trim() || name,
+    slogan: ai.brand.slogan.trim(),
+    palette: null,
+    font: null,
+  };
+
+  const websiteData = toWebsiteData(
+    {
+      ...ai,
+      brand: { name: brand_data.name, slogan: brand_data.slogan },
+    },
+    type
+  );
 
   // 3) Save brand
   const { error: saveBrandErr } = await supabase
@@ -162,11 +236,7 @@ Rules:
   const { data: upsertedWebsite, error: upsertErr } = await supabase
     .from("websites")
     .upsert(
-      {
-        project_id: project.id,
-        user_id: user.id,
-        data: websiteData,
-      },
+      { project_id: project.id, user_id: user.id, data: websiteData },
       { onConflict: "project_id" }
     )
     .select()

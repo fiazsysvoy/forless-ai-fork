@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { ProjectRow } from "../types";
 import Image from "next/image";
+import { Trash2 } from "lucide-react";
 
 export default function ProjectGrid({
   projects,
@@ -56,13 +57,35 @@ function ProjectCard({ project }: { project: ProjectRow }) {
       })
     : "—";
 
+  const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const confirmed = confirm(
+      `Are you sure you want to delete "${name}"? This cannot be undone.`
+    );
+
+    if (!confirmed) return;
+
+    const res = await fetch(`/api/projects/${project.id}`, {
+      method: "DELETE",
+    });
+
+    if (!res.ok) {
+      alert("Failed to delete project");
+      return;
+    }
+
+    // optional: refresh list
+    window.location.reload();
+  };
+
   return (
     <Link
-      // href={`/dashboard/projects/${project.id}`}
       href={`/website-builder?projectId=${project.id}`}
       className="group flex flex-col rounded-lg border border-slate-800 bg-slate-900/60 p-3 text-xs transition hover:border-primary hover:bg-slate-900"
     >
-      <div className="h-28 overflow-hidden rounded-md border border-slate-800 bg-slate-900">
+      <div className="relative h-28 overflow-hidden rounded-md border border-slate-800 bg-slate-900">
         {project.thumbnail_url ? (
           <Image
             src={project.thumbnail_url}
@@ -73,9 +96,17 @@ function ProjectCard({ project }: { project: ProjectRow }) {
             height={500}
           />
         ) : (
-          // <span>{project.thumbnail_url}</span>
           <div className="h-full w-full bg-linear-to-br from-slate-800 to-slate-900" />
         )}
+
+        {/* Delete Button */}
+        <button
+          onClick={handleDelete}
+          className="absolute right-2 top-2 hidden rounded-md bg-black/60 p-1.5 text-slate-300 hover:bg-red-600 hover:text-white group-hover:block"
+          title="Delete project"
+        >
+          <Trash2 size={14} />
+        </button>
       </div>
 
       <div className="mt-3 flex items-start justify-between gap-2">

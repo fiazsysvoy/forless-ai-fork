@@ -10,7 +10,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing idea" }, { status: 400 });
     }
 
-    // Responses API (recommended for new projects) :contentReference[oaicite:3]{index=3}
+    // Responses API
     const resp = await openai.responses.create({
       model: "gpt-4o-mini",
       input: [
