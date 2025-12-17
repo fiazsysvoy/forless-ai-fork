@@ -170,7 +170,9 @@ Return JSON EXACTLY:
 }
 
 Rules:
+- about.body must be 2-3 sentences.
 - Keep copy short.
+- features.items 5-8 words each.
 - Use placeholders if unknown.
 -imageQuery must be a short Unsplash search phrase (1–2 words), generic and visual
         `.trim(),
