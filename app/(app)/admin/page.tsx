@@ -17,6 +17,12 @@ export default async function AdminPage() {
       >
         View Projects
       </a>
+      <a
+        href="/admin/sites"
+        className="mt-4 inline-block rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 hover:text-white"
+      >
+        Moderate Sites
+      </a>
     </div>
   );
 }
