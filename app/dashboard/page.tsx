@@ -34,7 +34,7 @@ export default async function DashboardPage() {
 
   const safeProjects: ProjectRow[] = projects ?? [];
 
-  // Basic stats for now (we can wire real ones later)
+  // Basic stats for now. will add more later.
   const stats = {
     totalProjects: safeProjects.length,
     publishedSites: safeProjects.filter((p) => p.status === "published").length,

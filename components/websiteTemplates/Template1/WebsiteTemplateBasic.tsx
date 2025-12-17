@@ -20,7 +20,7 @@ type Props = {
 };
 
 export function WebsiteTemplateBasic({ data, theme }: Props) {
-  console.log("from template data: ", data);
+  // console.log("from template data: ", data);
   const { style, primary, primaryHover, secondary } = resolveTheme(theme);
   return (
     <div

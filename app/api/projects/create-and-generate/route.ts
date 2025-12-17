@@ -7,7 +7,7 @@ import { openai } from "@/lib/openai";
 import type { WebsiteData } from "@/lib/types/websiteTypes";
 
 const Schema = z.object({
-  name: z.string().min(1, "Name is required"),
+  name: z.string().min(3, "Name is required"),
   idea: z.string().min(1, "Idea is required"),
   websiteType: z.string().optional(),
 });
@@ -97,7 +97,6 @@ function toWebsiteData(ai: AiOut, websiteType: string): WebsiteData {
     },
   };
 }
-
 export async function POST(req: Request) {
   const supabase = await createServerSupabaseClient();
 

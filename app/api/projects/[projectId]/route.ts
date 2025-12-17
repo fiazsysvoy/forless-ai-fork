@@ -92,7 +92,6 @@ export async function DELETE(
   }
 
   const supabase = await createServerSupabaseClient();
-
   const {
     data: { user },
     error: userError,
