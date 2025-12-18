@@ -7,12 +7,20 @@ type Me = {
   profile: { role: string } | null;
 };
 
-export function useMe() {
+export function useMe(userId?: string) {
   const [me, setMe] = useState<Me | null>(null);
 
   useEffect(() => {
     let alive = true;
-    fetch("/api/me", { cache: "no-store" })
+
+    // reset immediately s
+    setMe(null);
+
+    fetch("/api/me", {
+      method: "GET",
+      cache: "no-store",
+      headers: { "Cache-Control": "no-store" },
+    })
       .then((r) => r.json())
       .then((data) => {
         if (alive) setMe(data);
@@ -24,7 +32,7 @@ export function useMe() {
     return () => {
       alive = false;
     };
-  }, []);
+  }, [userId]); // 👈 refetch whenever auth user changes
 
   const isAdmin = me?.profile?.role === "admin";
   return { me, isAdmin, loading: me === null };

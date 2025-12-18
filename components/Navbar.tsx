@@ -7,11 +7,11 @@ import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useMe } from "@/components/hooks/useMe";
+// import { useMe } from "@/components/hooks/useMe";
 
 export function Navbar() {
   const router = useRouter();
-  const { user, loading } = useAuth();
+  const { user, loading, isAdmin } = useAuth();
   const [supabase] = useState(() => createBrowserSupabaseClient());
 
   const handleLogout = async () => {
@@ -38,7 +38,8 @@ export function Navbar() {
       },
     });
   };
-  const { isAdmin } = useMe();
+  // const { isAdmin } = useMe();
+  // const { isAdmin, loading: meLoading } = useMe(user?.id);
 
   return (
     <header className="border-b border-slate-800 bg-bg-card backdrop-blur">
@@ -69,7 +70,8 @@ export function Navbar() {
               Dashboard
             </Link>
           )}
-          {isAdmin && (
+
+          {user && isAdmin && (
             <Link
               href="/admin"
               className="text-sm text-white/80 hover:text-white"
@@ -77,6 +79,7 @@ export function Navbar() {
               Admin Panel
             </Link>
           )}
+
           <div className="h-4 w-px bg-slate-700 hidden sm:block" />
 
           {loading ? (

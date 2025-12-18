@@ -13,27 +13,51 @@ import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 type AuthContextType = {
   user: User | null;
   loading: boolean;
+  role: string | null;
+  isAdmin: boolean;
 };
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
+  role: null,
+  isAdmin: false,
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [supabase] = useState(() => createBrowserSupabaseClient());
 
+  async function loadRole(userId: string) {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", userId)
+      .single();
+
+    if (error) {
+      setRole(null);
+      return;
+    }
+
+    setRole(data?.role ?? null);
+  }
+
   useEffect(() => {
     const init = async () => {
-      const { data, error } = await supabase.auth.getSession();
+      const { data } = await supabase.auth.getSession();
+      const u = data.session?.user ?? null;
 
-      if (!error && data.session) {
-        setUser(data.session.user);
+      setUser(u);
+
+      if (u) {
+        await loadRole(u.id);
       } else {
-        setUser(null);
+        setRole(null);
       }
+
       setLoading(false);
     };
 
@@ -41,8 +65,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      const u = session?.user ?? null;
+      setUser(u);
+
+      if (u) {
+        await loadRole(u.id);
+      } else {
+        setRole(null);
+      }
+
       setLoading(false);
     });
 
@@ -52,7 +84,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [supabase]);
 
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider
+      value={{ user, loading, role, isAdmin: role === "admin" }}
+    >
       {children}
     </AuthContext.Provider>
   );
