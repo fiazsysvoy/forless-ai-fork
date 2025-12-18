@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+/* project theme */
+@theme {
+  --color-primary: #10b981;
+  --color-primary-hover: #34d399;
+
+  --color-secondary: #0ea5e9;
+  --color-secondary-hover: #38bdf8;
+
+  --color-bg: #0f172a;
+  --color-bg-card: rgba(30, 41, 59, 0.7);
+
+  --color-text: #f8fafc;
+  --color-text-muted: #94a3b8;
+
+  --font-sans: Arial, Helvetica, sans-serif;
+}
+@layer components {
+  .input-base {
+    @apply mt-1 w-full rounded-md border border-slate-700 bg-slate-900
+           px-2 py-1 text-xs 
+           focus:outline-none 
+           focus:border-primary
+           transition-all;
+  }
+  .btn-fill{
+    @apply   rounded-md bg-primary  py-1 px-4  text-sm  text-slate-950 shadow-sm hover:bg-primary-hover cursor-pointer
+  }
+}
+
+/* theme {
+  --color-primary: #10b981;
+  --color-primary-hover: #34d399;
+
+  --color-secondary: #0ea5e9;
+  --color-secondary-hover: #38bdf8;
+
+  --color-bg: #0f172a;
+  --color-bg-card: rgba(30, 41, 59, 0.7);
+
+  --color-text: #f8fafc;
+  --color-text-muted: #94a3b8;
+
+  --font-sans: Arial, Helvetica, sans-serif;
+} */
+
+
+
+/* dark mode */
+.dark {
+  --color-primary: #22c55e;
+  --color-primary-hover: #4ade80;
+
+  --color-bg: #020617;
+  --color-bg-card: rgba(10, 12, 18, 0.8);
+
+  --color-text: #e2e8f0;
+  --color-text-muted: #94a3b8;
+}
+
+/* Optional: Auto dark mode if system prefers */
+@media (prefers-color-scheme: dark) {
+  :root:not(.dark) {
+    --color-bg: #020617;
+    --color-text: #e2e8f0;
+  }
+}
+
+/* Global body style */
+body {
+  @apply bg-bg text-text font-sans;
+}
